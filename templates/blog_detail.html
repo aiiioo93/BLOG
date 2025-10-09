@@ -15,6 +15,68 @@
     <hr>
     <a href="{% url 'post_list' %}" class="btn btn-secondary">&larr; Retour à la liste</a>
   </article>
+
+  <!-- Section Commentaires -->
+  <section class="mt-5">
+    <h3 class="mb-4">Commentaires ({{ comments.count }})</h3>
+    
+    {% if comments %}
+      <div class="comments-list mb-4">
+        {% for comment in comments %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <h6 class="card-subtitle mb-2 text-muted">
+                {{ comment.author_name }} - {{ comment.created|date:"d/m/Y à H:i" }}
+              </h6>
+              <p class="card-text">{{ comment.body|linebreaks }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-muted">Aucun commentaire pour le moment. Soyez le premier à commenter !</p>
+    {% endif %}
+
+    <!-- Formulaire de commentaire -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <h4>Ajouter un commentaire</h4>
+      </div>
+      <div class="card-body">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+        
+        <form method="post" novalidate>
+          {% csrf_token %}
+          
+          {% for field in comment_form %}
+            <div class="mb-3">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.errors %}
+                <div class="text-danger small">
+                  {% for error in field.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+          
+          <button type="submit" class="btn btn-primary">Envoyer le commentaire</button>
+        </form>
+        <p class="text-muted small mt-2">
+          <em>Votre commentaire sera visible après modération.</em>
+        </p>
+      </div>
+    </div>
+  </section>
 {% endblock %}
 
 

@@ -32,4 +32,24 @@ class Post(models.Model):
     def __str__(self) -> str:
         return self.title
 
-# Create your models here.
+
+class Comment(models.Model):
+    """Commentaire sur un article de blog."""
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
+    author_name = models.CharField(max_length=100, verbose_name="Nom")
+    author_email = models.EmailField(verbose_name="Email")
+    body = models.TextField(verbose_name="Commentaire")
+    created = models.DateTimeField(default=timezone.now, editable=False)
+    approved = models.BooleanField(default=False, verbose_name="Approuvé")
+
+    class Meta:
+        ordering = ['created']
+        verbose_name = "Commentaire"
+        verbose_name_plural = "Commentaires"
+
+    def __str__(self) -> str:
+        return f"Commentaire de {self.author_name} sur {self.post.title}"

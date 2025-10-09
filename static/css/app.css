@@ -58,3 +58,23 @@ footer {
   border-color: #007bff;
 }
 
+/* Commentaires */
+.comments-list .card {
+  background-color: #f8f9fa;
+  border-left: 3px solid #007bff;
+}
+
+.comments-list .card-body {
+  padding: 1rem;
+}
+
+.comments-list .card-subtitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.card-header h4 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+

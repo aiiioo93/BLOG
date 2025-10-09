@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
-from .models import Post
+from django.contrib import messages
+from .models import Post, Comment
+from .forms import CommentForm
 
 
 def post_list_placeholder(request):
@@ -13,6 +15,34 @@ def post_list_placeholder(request):
 
 
 def post_detail_placeholder(request, slug: str):
-    """Détail d'un article publié par slug."""
+    """Détail d'un article publié par slug avec formulaire de commentaire."""
     post = get_object_or_404(Post, slug=slug, status=Post.Status.PUBLISHED)
-    return render(request, "blog_detail.html", {"post": post})
+    
+    # Récupérer les commentaires approuvés
+    comments = post.comments.filter(approved=True)
+    
+    # Traiter le formulaire de commentaire
+    comment_form = CommentForm()
+    comment_posted = False
+    
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.save()
+            comment_posted = True
+            messages.success(
+                request,
+                "Votre commentaire a été soumis et sera visible après modération."
+            )
+            # Rediriger pour éviter la resoumission du formulaire
+            return redirect('post_detail', slug=slug)
+    
+    context = {
+        'post': post,
+        'comments': comments,
+        'comment_form': comment_form,
+        'comment_posted': comment_posted,
+    }
+    return render(request, "blog_detail.html", context)
