@@ -3,6 +3,37 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 
+class Category(models.Model):
+    """Catégorie d'articles."""
+    name = models.CharField(max_length=100, unique=True, verbose_name="Nom")
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField(blank=True, verbose_name="Description")
+    created = models.DateTimeField(default=timezone.now, editable=False)
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = "Catégorie"
+        verbose_name_plural = "Catégories"
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Tag(models.Model):
+    """Tag/étiquette pour les articles."""
+    name = models.CharField(max_length=50, unique=True, verbose_name="Nom")
+    slug = models.SlugField(max_length=50, unique=True)
+    created = models.DateTimeField(default=timezone.now, editable=False)
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Post(models.Model):
     class Status(models.TextChoices):
         DRAFT = 'DRAFT', 'Brouillon'
@@ -24,6 +55,20 @@ class Post(models.Model):
         null=True,
         blank=True,
         related_name='posts',
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='posts',
+        verbose_name='Catégorie',
+    )
+    tags = models.ManyToManyField(
+        Tag,
+        blank=True,
+        related_name='posts',
+        verbose_name='Tags',
     )
 
     class Meta:

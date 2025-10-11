@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.contrib import messages
-from .models import Post, Comment
+from django.db.models import Q, Count
+from .models import Post, Comment, Category, Tag
 from .forms import CommentForm
 
 
@@ -46,3 +47,62 @@ def post_detail_placeholder(request, slug: str):
         'comment_posted': comment_posted,
     }
     return render(request, "blog_detail.html", context)
+
+
+def search_posts(request):
+    """Recherche d'articles par mots-clés."""
+    query = request.GET.get('q', '')
+    posts = Post.objects.filter(status=Post.Status.PUBLISHED)
+    
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) | Q(body__icontains=query)
+        ).distinct()
+    
+    paginator = Paginator(posts.order_by('-created'), 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'query': query,
+    }
+    return render(request, "blog_search.html", context)
+
+
+def category_posts(request, slug: str):
+    """Liste des articles d'une catégorie."""
+    category = get_object_or_404(Category, slug=slug)
+    posts = Post.objects.filter(
+        status=Post.Status.PUBLISHED,
+        category=category
+    ).order_by('-created')
+    
+    paginator = Paginator(posts, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'category': category,
+    }
+    return render(request, "blog_category.html", context)
+
+
+def tag_posts(request, slug: str):
+    """Liste des articles d'un tag."""
+    tag = get_object_or_404(Tag, slug=slug)
+    posts = Post.objects.filter(
+        status=Post.Status.PUBLISHED,
+        tags=tag
+    ).order_by('-created')
+    
+    paginator = Paginator(posts, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'tag': tag,
+    }
+    return render(request, "blog_tag.html", context)

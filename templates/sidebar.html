@@ -1,0 +1,59 @@
+{% load static %}
+
+<!-- Sidebar de recherche et navigation -->
+<div class="sidebar">
+    <!-- Formulaire de recherche -->
+    <div class="sidebar-card search-card">
+        <h5 class="sidebar-title">
+            <span class="icon">🔍</span>
+            Recherche
+        </h5>
+        <form method="get" action="{% url 'search_posts' %}" class="search-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Rechercher..." value="{{ query|default:'' }}">
+                <button class="btn btn-primary" type="submit">
+                    <span>→</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Catégories -->
+    {% if categories %}
+    <div class="sidebar-card">
+        <h5 class="sidebar-title">
+            <span class="icon">📂</span>
+            Catégories
+        </h5>
+        <ul class="category-list">
+            {% for category in categories %}
+            <li class="category-item">
+                <a href="{% url 'category_posts' category.slug %}" class="category-link">
+                    <span class="category-name">{{ category.name }}</span>
+                    <span class="category-count badge">{{ category.post_count }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Tags populaires -->
+    {% if tags %}
+    <div class="sidebar-card">
+        <h5 class="sidebar-title">
+            <span class="icon">🏷️</span>
+            Tags populaires
+        </h5>
+        <div class="tag-cloud">
+            {% for tag in tags %}
+            <a href="{% url 'tag_posts' tag.slug %}" class="tag-badge" data-count="{{ tag.post_count }}">
+                {{ tag.name }}
+                <span class="tag-count">{{ tag.post_count }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
