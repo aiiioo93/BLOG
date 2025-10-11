@@ -83,6 +83,51 @@ Projet Django "Blog minimal" livré en 7 jours. Ce README résume, jour par jour
   - Animations séquentielles pour tous les éléments.
 - Git: branche `jour-4`, commit, merge vers `main`, push.
 
+### Jour 5 — Éditeur de code et Markdown avancé
+- **Modèle Comment** (`blog/models.py`):
+  - Ajout du champ `body_markdown` (booléen) pour identifier les commentaires en format Markdown.
+- **Migration**: `0004_comment_body_markdown.py` créée et appliquée.
+- **Formulaire** (`blog/forms.py`):
+  - `CommentForm` mis à jour avec le champ `body_markdown` et checkbox.
+  - Zone de texte agrandie (8 lignes) pour l'édition de code.
+- **Admin Django**:
+  - `CommentAdmin` mis à jour avec filtres pour les commentaires Markdown.
+- **Éditeur avancé** (`templates/comment_editor.html`):
+  - Barre d'outils avec boutons de formatage (gras, italique, code, liens).
+  - Sélecteur de langage pour les blocs de code (Python, JavaScript, HTML, CSS, etc.).
+  - Bouton d'aperçu en temps réel du rendu Markdown.
+  - Aide Markdown intégrée avec exemples.
+  - Zone d'édition avec police monospace.
+- **Templates** (`templates/blog_detail.html`):
+  - Affichage conditionnel du rendu Markdown vs texte brut.
+  - Badge "📝 Markdown" pour identifier les commentaires formatés.
+  - Interface de commentaire repensée avec layout responsive.
+- **Rendu Markdown**:
+  - Support complet du Markdown : titres, listes, tableaux, citations.
+  - Coloration syntaxique automatique des blocs de code avec Prism.js.
+  - Boutons "Copier le code" sur chaque bloc de code.
+  - Liens cliquables et formatage avancé.
+- **JavaScript** (`static/js/comment-editor.js`):
+  - Classe `CommentEditor` pour gérer l'interface d'édition.
+  - Barre d'outils interactive avec insertion de formatage.
+  - Preview en temps réel du Markdown.
+  - Gestion des blocs de code avec sélection de langage.
+  - Boutons de copie automatiques sur les blocs de code.
+  - Animations et feedback visuel.
+- **Librairies externes** (`templates/base.html`):
+  - CodeMirror 5.65.2 pour l'édition de code.
+  - Prism.js 1.29.0 pour la coloration syntaxique.
+  - Marked.js 9.1.6 pour le parsing Markdown.
+  - Thèmes sombres pour les blocs de code.
+- **Styles CSS** (`static/css/app.css`):
+  - Éditeur avec barre d'outils stylisée et animations.
+  - Blocs de code avec thème sombre et boutons de copie.
+  - Preview avec rendu Markdown complet.
+  - Responsive design pour mobile et tablette.
+  - Animations pour les interactions (hover, focus, clic).
+  - Support des tableaux, citations, listes dans le Markdown.
+- Git: branche `jour-5`, commit, merge vers `main`, push.
+
 ## Démarrage (dev)
 - Installer les dépendances listées dans `requirements.txt`.
 - Appliquer les migrations: `python manage.py migrate`.

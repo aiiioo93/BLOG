@@ -30,8 +30,8 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("author_name", "post", "created", "approved")
-    list_filter = ("approved", "created")
+    list_display = ("author_name", "post", "body_markdown", "created", "approved")
+    list_filter = ("approved", "body_markdown", "created")
     search_fields = ("author_name", "author_email", "body")
     ordering = ("-created",)
     actions = ["approve_comments", "disapprove_comments"]

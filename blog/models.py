@@ -88,6 +88,7 @@ class Comment(models.Model):
     author_name = models.CharField(max_length=100, verbose_name="Nom")
     author_email = models.EmailField(verbose_name="Email")
     body = models.TextField(verbose_name="Commentaire")
+    body_markdown = models.BooleanField(default=False, verbose_name="Format Markdown")
     created = models.DateTimeField(default=timezone.now, editable=False)
     approved = models.BooleanField(default=False, verbose_name="Approuvé")
 

@@ -1,0 +1,89 @@
+<!-- Éditeur de commentaires avancé avec markdown et code -->
+<div class="comment-editor-wrapper">
+    <!-- Barre d'outils -->
+    <div class="editor-toolbar">
+        <div class="toolbar-section">
+            <button type="button" class="btn btn-sm btn-outline-secondary toolbar-btn" data-action="bold" title="Gras">
+                <strong>B</strong>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary toolbar-btn" data-action="italic" title="Italique">
+                <em>I</em>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary toolbar-btn" data-action="code" title="Code inline">
+                <code>&lt;/&gt;</code>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary toolbar-btn" data-action="link" title="Lien">
+                🔗
+            </button>
+        </div>
+        
+        <div class="toolbar-section">
+            <button type="button" class="btn btn-sm btn-outline-primary toolbar-btn" data-action="code-block" title="Bloc de code">
+                📝
+            </button>
+            <select class="form-select form-select-sm language-select" id="code-language" title="Langage">
+                <option value="">Sélectionner...</option>
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="bash">Bash</option>
+                <option value="json">JSON</option>
+                <option value="sql">SQL</option>
+                <option value="markdown">Markdown</option>
+            </select>
+        </div>
+        
+        <div class="toolbar-section">
+            <button type="button" class="btn btn-sm btn-outline-info toolbar-btn" data-action="preview" title="Aperçu">
+                👁️
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-warning toolbar-btn" data-action="clear" title="Effacer">
+                🗑️
+            </button>
+        </div>
+    </div>
+    
+    <!-- Zone d'édition -->
+    <div class="editor-container">
+        <textarea id="comment-body" name="body" class="form-control editor-textarea" rows="8" 
+                  placeholder="Tapez votre commentaire ici... (Support Markdown et code)"></textarea>
+        
+        <!-- Aperçu -->
+        <div id="comment-preview" class="comment-preview" style="display: none;">
+            <div class="preview-header">
+                <h6>👁️ Aperçu du rendu</h6>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="hide-preview">✏️ Éditer</button>
+            </div>
+            <div class="preview-content"></div>
+        </div>
+    </div>
+    
+    <!-- Aide Markdown -->
+    <div class="markdown-help">
+        <button type="button" class="btn btn-link btn-sm" data-bs-toggle="collapse" data-bs-target="#markdownHelp">
+            📖 Aide Markdown
+        </button>
+        <div class="collapse" id="markdownHelp">
+            <div class="card card-body">
+                <small>
+                    <strong>Formatage :</strong><br>
+                    **Gras** → <strong>Gras</strong><br>
+                    *Italique* → <em>Italique</em><br>
+                    `code` → <code>code</code><br>
+                    [Lien](URL) → Lien<br><br>
+                    <strong>Bloc de code :</strong><br>
+                    ```python<br>
+                    def hello():<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print("Hello!")<br>
+                    ```<br><br>
+                    <strong>Listes :</strong><br>
+                    - Item 1<br>
+                    - Item 2<br>
+                    1. Numéroté 1<br>
+                    2. Numéroté 2
+                </small>
+            </div>
+        </div>
+    </div>
+</div>

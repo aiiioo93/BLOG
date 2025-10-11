@@ -46,8 +46,17 @@
             <div class="card-body">
               <h6 class="card-subtitle mb-2 text-muted">
                 {{ comment.author_name }} - {{ comment.created|date:"d/m/Y à H:i" }}
+                {% if comment.body_markdown %}
+                  <span class="badge bg-info ms-2">📝 Markdown</span>
+                {% endif %}
               </h6>
-              <p class="card-text">{{ comment.body|linebreaks }}</p>
+              <div class="card-text comment-content">
+                {% if comment.body_markdown %}
+                  <div class="markdown-content">{{ comment.body|safe }}</div>
+                {% else %}
+                  {{ comment.body|linebreaks }}
+                {% endif %}
+              </div>
             </div>
           </div>
         {% endfor %}
@@ -74,21 +83,62 @@
         <form method="post" novalidate>
           {% csrf_token %}
           
-          {% for field in comment_form %}
-            <div class="mb-3">
-              {{ field.label_tag }}
-              {{ field }}
-              {% if field.errors %}
+          <!-- Champs nom et email -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="{{ comment_form.author_name.id_for_label }}" class="form-label">{{ comment_form.author_name.label }}</label>
+              {{ comment_form.author_name }}
+              {% if comment_form.author_name.errors %}
                 <div class="text-danger small">
-                  {% for error in field.errors %}
+                  {% for error in comment_form.author_name.errors %}
                     {{ error }}
                   {% endfor %}
                 </div>
               {% endif %}
             </div>
-          {% endfor %}
+            <div class="col-md-6">
+              <label for="{{ comment_form.author_email.id_for_label }}" class="form-label">{{ comment_form.author_email.label }}</label>
+              {{ comment_form.author_email }}
+              {% if comment_form.author_email.errors %}
+                <div class="text-danger small">
+                  {% for error in comment_form.author_email.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
           
-          <button type="submit" class="btn btn-primary">Envoyer le commentaire</button>
+          <!-- Checkbox Markdown -->
+          <div class="mb-3">
+            <div class="form-check">
+              {{ comment_form.body_markdown }}
+              <label class="form-check-label" for="{{ comment_form.body_markdown.id_for_label }}">
+                {{ comment_form.body_markdown.label }}
+              </label>
+            </div>
+          </div>
+          
+          <!-- Éditeur de commentaire -->
+          <div class="mb-3">
+            <label for="{{ comment_form.body.id_for_label }}" class="form-label">{{ comment_form.body.label }}</label>
+            {% include 'comment_editor.html' %}
+            {% if comment_form.body.errors %}
+              <div class="text-danger small">
+                {% for error in comment_form.body.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+          <button type="submit" class="btn btn-primary">
+            <span class="btn-text">Envoyer le commentaire</span>
+            <span class="btn-loading" style="display: none;">
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Envoi...
+            </span>
+          </button>
         </form>
         <p class="text-muted small mt-2">
           <em>Votre commentaire sera visible après modération.</em>
